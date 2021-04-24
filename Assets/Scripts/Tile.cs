@@ -11,6 +11,7 @@ public class Tile : MonoBehaviour
     [SerializeField] GameObject tileStart;
     [SerializeField] GameObject tileEnd;
     private Level level;
+    internal Action OnTowerPlaced;
 
     internal void SetTile(char tileType)
     {
@@ -32,6 +33,7 @@ public class Tile : MonoBehaviour
     {
         if (tileTop.activeInHierarchy && !towerUnit.gameObject.activeInHierarchy)
         {
+            OnTowerPlaced?.Invoke();
             towerUnit.Activate();
         }
     }

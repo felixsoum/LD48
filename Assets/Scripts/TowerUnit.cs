@@ -6,9 +6,10 @@ using UnityEngine;
 public class TowerUnit : Unit
 {
     [SerializeField] Animator animator;
+    [SerializeField] ProjectileUnit projectilePrefab;
     const float AttackRange = 4;
 
-    const float CooldownDuration = 3f;
+    const float CooldownDuration = 1f;
     float cooldownTimer;
 
     private Level level;
@@ -32,14 +33,18 @@ public class TowerUnit : Unit
 
     internal void Activate()
     {
+        cooldownTimer = CooldownDuration;
         gameObject.SetActive(true);
     }
 
     void Attack(EnemyUnit nearestEnemy)
     {
+        SetOrientation(transform.position.x < nearestEnemy.transform.position.x);
         cooldownTimer = CooldownDuration;
+        var projectilePosition = transform.position + Vector3.up * 0.5f;
+        var projectileObject = Instantiate(projectilePrefab, projectilePosition, Quaternion.identity);
+        projectileObject.GetComponent<ProjectileUnit>().TargetUnit = nearestEnemy;
         animator.SetTrigger("Attack");
-        nearestEnemy.Die();
     }
 
     internal void SetLevel(Level level)

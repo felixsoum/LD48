@@ -5,15 +5,16 @@ using UnityEngine;
 
 public class Level : MonoBehaviour
 {
+    [SerializeField] GameDirector gameDirector;
     [SerializeField] GameObject tilePrefab;
     [SerializeField] Transform tileParent;
     [SerializeField] Tile[] tiles;
     [SerializeField] GameObject enemyPrefab;
     const int RowCount = 8;
     const int ColCount = 8;
-
     HashSet<EnemyUnit> enemies = new HashSet<EnemyUnit>();
 
+    int towerPlacedCount;
     char[,] scriptedLevel = new[,]
     {
         { '#', '#', '#', '#', '#', '#', '#', '#' },
@@ -61,11 +62,16 @@ public class Level : MonoBehaviour
 
     private IEnumerator SpawnEnemies()
     {
-        yield return new WaitForSeconds(1);
+        yield return new WaitUntil(() => towerPlacedCount > 0);
+        yield return new WaitForSeconds(0.5f);
+        SpawnEnemy();
+        yield return new WaitForSeconds(5f);
+        SpawnEnemy();
+        yield return new WaitForSeconds(5f);
         while (true)
         {
             SpawnEnemy();
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(3f);
         }
     }
 
@@ -74,6 +80,7 @@ public class Level : MonoBehaviour
         var spawnPosition = tiles[startIndex].transform.position;
         var enemyObject = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
         var enemyUnit = enemyObject.GetComponent<EnemyUnit>();
+        enemyUnit.SetGameDirector(gameDirector);
         enemyUnit.OnDeath += deadEnemy => enemies.Remove(deadEnemy);
         enemies.Add(enemyUnit);
 
@@ -109,8 +116,11 @@ public class Level : MonoBehaviour
                     default:
                         break;
                 }
-                tiles[tileIndex].SetLevel(this);
-                tiles[tileIndex].SetTile(tileType);
+
+                Tile tile = tiles[tileIndex];
+                tile.SetLevel(this);
+                tile.OnTowerPlaced += () => towerPlacedCount++;
+                tile.SetTile(tileType);
             }
         }
     }
