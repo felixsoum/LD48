@@ -12,6 +12,8 @@ public class Level : MonoBehaviour
     const int RowCount = 8;
     const int ColCount = 8;
 
+    HashSet<EnemyUnit> enemies = new HashSet<EnemyUnit>();
+
     char[,] scriptedLevel = new[,]
     {
         { '#', '#', '#', '#', '#', '#', '#', '#' },
@@ -72,6 +74,9 @@ public class Level : MonoBehaviour
         var spawnPosition = tiles[startIndex].transform.position;
         var enemyObject = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
         var enemyUnit = enemyObject.GetComponent<EnemyUnit>();
+        enemyUnit.OnDeath += deadEnemy => enemies.Remove(deadEnemy);
+        enemies.Add(enemyUnit);
+
         InitEnemy(enemyUnit);
     }
 
@@ -104,8 +109,33 @@ public class Level : MonoBehaviour
                     default:
                         break;
                 }
+                tiles[tileIndex].SetLevel(this);
                 tiles[tileIndex].SetTile(tileType);
             }
         }
+    }
+
+    internal EnemyUnit GetNearestEnemy(Vector3 position)
+    {
+        if (enemies.Count == 0)
+        {
+            return null;
+        }
+
+        EnemyUnit nearestEnemy = null;
+        float nearestDistance = 0;
+
+        foreach (var enemy in enemies)
+        {
+            float candidateDistance = Vector3.Distance(position, enemy.transform.position);
+
+            if (nearestEnemy == null || candidateDistance < nearestDistance)
+            {
+                nearestEnemy = enemy;
+                nearestDistance = candidateDistance;
+            }
+        }
+
+        return nearestEnemy;
     }
 }

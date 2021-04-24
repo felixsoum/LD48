@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -5,6 +6,7 @@ public class EnemyUnit : Unit
 {
     private const int MoveSpeed = 2;
     List<Vector3> waypoints = new List<Vector3>();
+    public Action<EnemyUnit> OnDeath;
 
     protected override void Update()
     {
@@ -25,7 +27,7 @@ public class EnemyUnit : Unit
         }
         else
         {
-            Destroy(gameObject);
+            Die();
         }
     }
 
@@ -34,4 +36,9 @@ public class EnemyUnit : Unit
         waypoints.Add(position);
     }
 
+    internal void Die()
+    {
+        OnDeath?.Invoke(this);
+        Destroy(gameObject);
+    }
 }

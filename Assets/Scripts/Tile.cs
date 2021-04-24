@@ -1,12 +1,16 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Tile : MonoBehaviour
 {
+    [SerializeField] TowerUnit towerUnit;
+
     [SerializeField] GameObject tileTop;
     [SerializeField] GameObject tileStart;
     [SerializeField] GameObject tileEnd;
+    private Level level;
 
     internal void SetTile(char tileType)
     {
@@ -24,4 +28,17 @@ public class Tile : MonoBehaviour
         }
     }
 
+    private void OnMouseDown()
+    {
+        if (tileTop.activeInHierarchy && !towerUnit.gameObject.activeInHierarchy)
+        {
+            towerUnit.Activate();
+        }
+    }
+
+    internal void SetLevel(Level level)
+    {
+        this.level = level;
+        towerUnit.SetLevel(level);
+    }
 }
