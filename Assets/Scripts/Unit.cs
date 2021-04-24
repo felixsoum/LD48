@@ -13,8 +13,13 @@ public class Unit : MonoBehaviour
         playerCamera = Camera.main;
     }
 
-    private void Update()
+    protected virtual void Update()
     {
         visualObject.transform.forward = playerCamera.transform.forward;
+    }
+
+    protected void SetOrientation(bool isFacingRight)
+    {
+        visualObject.transform.localScale = new Vector3(isFacingRight ? 1 : -1, 1, 1);
     }
 }
