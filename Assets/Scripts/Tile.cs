@@ -8,25 +8,20 @@ public class Tile : MonoBehaviour
     [SerializeField] GameObject tileStart;
     [SerializeField] GameObject tileEnd;
 
-    private void Awake()
+    internal void SetTile(char tileType)
     {
-        if (UnityEngine.Random.value > 0.5f)
+        switch(tileType)
         {
-            if (Random.value > 0.5f)
-            {
+            case '#':
                 tileTop.SetActive(true);
-            }
-            else if (Random.value > 0.1f)
-            {
-                if (Random.value > 0.5f)
-                {
-                    tileStart.SetActive(true);
-                }
-                else
-                {
-                    tileEnd.SetActive(true);
-                }
-            }
+                break;
+            case 'S':
+                tileStart.SetActive(true);
+                break;
+            case 'E':
+                tileEnd.SetActive(true);
+                break;
         }
     }
+
 }
