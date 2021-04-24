@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemyUnit : Unit
 {
-    int hp = 10;
+    int hp = 5;
     private const float MoveSpeed = 0.5f;
     List<Vector3> waypoints = new List<Vector3>();
     public Action<EnemyUnit> OnDeath;

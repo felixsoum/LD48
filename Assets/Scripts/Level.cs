@@ -13,6 +13,7 @@ public class Level : MonoBehaviour
     const int RowCount = 8;
     const int ColCount = 8;
     HashSet<EnemyUnit> enemies = new HashSet<EnemyUnit>();
+    int spawnCount = 1;
 
     int towerPlacedCount;
     char[,] scriptedLevel = new[,]
@@ -64,14 +65,16 @@ public class Level : MonoBehaviour
     {
         yield return new WaitUntil(() => towerPlacedCount > 0);
         yield return new WaitForSeconds(0.5f);
-        SpawnEnemy();
-        yield return new WaitForSeconds(5f);
-        SpawnEnemy();
-        yield return new WaitForSeconds(5f);
         while (true)
         {
-            SpawnEnemy();
-            yield return new WaitForSeconds(3f);
+            for (int i = 0; i < spawnCount; i++)
+            {
+                SpawnEnemy();
+                yield return new WaitForSeconds(2f / spawnCount);
+            }
+            float longerWait = 5f + Mathf.Sqrt(spawnCount);
+            yield return new WaitForSeconds(longerWait);
+            spawnCount *= 2;
         }
     }
 

@@ -1,11 +1,10 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Tile : MonoBehaviour
 {
     [SerializeField] TowerUnit towerUnit;
+    [SerializeField] DoorUnit doorUnit;
 
     [SerializeField] GameObject tileTop;
     [SerializeField] GameObject tileStart;
@@ -15,7 +14,7 @@ public class Tile : MonoBehaviour
 
     internal void SetTile(char tileType)
     {
-        switch(tileType)
+        switch (tileType)
         {
             case '#':
                 tileTop.SetActive(true);
@@ -29,13 +28,26 @@ public class Tile : MonoBehaviour
         }
     }
 
-    private void OnMouseDown()
+    internal bool OnClick(UnitBuyButton selectedShopUnit)
     {
-        if (tileTop.activeInHierarchy && !towerUnit.gameObject.activeInHierarchy)
+        if (tileTop.activeInHierarchy)
         {
-            OnTowerPlaced?.Invoke();
-            towerUnit.Activate();
+            if (!towerUnit.gameObject.activeInHierarchy && selectedShopUnit.isTower)
+            {
+                OnTowerPlaced?.Invoke();
+                towerUnit.Activate();
+                return true;
+            }
         }
+        else
+        {
+            if (!doorUnit.gameObject.activeInHierarchy && !selectedShopUnit.isTower)
+            {
+                doorUnit.Activate();
+                return true;
+            }
+        }
+        return false;
     }
 
     internal void SetLevel(Level level)
