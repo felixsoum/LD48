@@ -4,18 +4,23 @@ using UnityEngine;
 
 public class EnemyUnit : Unit
 {
-    int hp = 5;
-    private const float MoveSpeed = 0.5f;
+    private const int BaseHp = 5;
+    int currentHp = BaseHp;
+    private const float BaseMoveSpeed = 0.25f;
+    float moveSpeed = BaseMoveSpeed;
     List<Vector3> waypoints = new List<Vector3>();
     public Action<EnemyUnit> OnDeath;
     private GameDirector gameDirector;
+
+    public int Depth { get; internal set; }
 
     protected override void Update()
     {
         base.Update();
         if (waypoints.Count > 0)
         {
-            if (Vector3.Distance(transform.position, waypoints[0]) < 0.01f)
+            float distanceThreshold = 0.01f * Level.GetDepthFactor(Depth);
+            if (Vector3.Distance(transform.position, waypoints[0]) < distanceThreshold)
             {
                 waypoints.RemoveAt(0);
             }
@@ -25,7 +30,8 @@ public class EnemyUnit : Unit
         {
             SetOrientation(transform.position.x < waypoints[0].x);
 
-            transform.position = Vector3.MoveTowards(transform.position, waypoints[0], MoveSpeed * Time.deltaTime);
+            float moveDelta = moveSpeed * Time.deltaTime * Level.GetDepthFactor(Depth);
+            transform.position = Vector3.MoveTowards(transform.position, waypoints[0], moveDelta);
         }
         else
         {
@@ -41,7 +47,7 @@ public class EnemyUnit : Unit
     internal override void Damage()
     {
         base.Damage();
-        if (--hp <= 0)
+        if (--currentHp <= 0)
         {
             Die();
         }
@@ -57,5 +63,11 @@ public class EnemyUnit : Unit
     internal void SetGameDirector(GameDirector gameDirector)
     {
         this.gameDirector = gameDirector;
+    }
+
+    internal void SetWaveNumber(int waveNumber)
+    {
+        currentHp += waveNumber;
+        moveSpeed *= waveNumber;
     }
 }

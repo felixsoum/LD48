@@ -41,14 +41,22 @@ public class TowerUnit : Unit
     {
         SetOrientation(transform.position.x < nearestEnemy.transform.position.x);
         cooldownTimer = CooldownDuration;
-        var projectilePosition = transform.position + Vector3.up * 0.5f;
+        var projectilePosition = transform.position + Vector3.up * 0.5f * Level.GetDepthFactor(level.Depth);
         var projectileObject = Instantiate(projectilePrefab, projectilePosition, Quaternion.identity);
-        projectileObject.GetComponent<ProjectileUnit>().TargetUnit = nearestEnemy;
+        ProjectileUnit projectileUnit = projectileObject.GetComponent<ProjectileUnit>();
+        projectileUnit.SetDepth(level.Depth);
+        projectileUnit.TargetUnit = nearestEnemy;
+        
         animator.SetTrigger("Attack");
     }
 
     internal void SetLevel(Level level)
     {
         this.level = level;
+    }
+
+    internal void Reset()
+    {
+        gameObject.SetActive(false);
     }
 }

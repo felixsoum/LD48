@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -6,13 +7,21 @@ using UnityEngine;
 public class GameDirector : MonoBehaviour
 {
     [SerializeField] TMP_Text coinText;
+    [SerializeField] TMP_Text depthText;
     [SerializeField] PlayerCamera playerCamera;
+    [SerializeField] GameObject backButton;
+    [SerializeField] Level startLevel;
     public int CoinAmount { get; set; } = 0;
+    int currentDepth;
     public UnitBuyButton SelectedShopUnit { get; internal set; }
+
+    Stack<Level> levelStack = new Stack<Level>();
 
     private void Awake()
     {
+        levelStack.Push(startLevel);
         AddCoin(2);
+        UpdateCameraTarget();
     }
 
     private void Update()
@@ -43,9 +52,43 @@ public class GameDirector : MonoBehaviour
             }
         }
     }
+
     internal void AddCoin(int amount)
     {
         CoinAmount += amount;
         coinText.text = $"x{CoinAmount}";
+    }
+
+    internal void OnLevelZoom(Level innerLevel)
+    {
+        levelStack.Peek().DisableColliders();
+        levelStack.Push(innerLevel);
+        currentDepth++;
+        UpdateDepthText();
+        UpdateCameraTarget();
+        backButton.SetActive(true);
+    }
+
+    private void UpdateDepthText()
+    {
+        depthText.text = $"Depth: {currentDepth}";
+    }
+
+    public void OnLevelBack()
+    {
+        currentDepth--;
+        levelStack.Pop();
+        levelStack.Peek().EnableColliders();
+        UpdateCameraTarget();
+        UpdateDepthText();
+        if (currentDepth == 0)
+        {
+            backButton.SetActive(false);
+        }
+    }
+
+    private void UpdateCameraTarget()
+    {
+        playerCamera.TargetTransform = levelStack.Peek().cameraPosition;
     }
 }

@@ -207,7 +207,6 @@ GameObject:
   - component: {fileID: 3619918436155901032}
   - component: {fileID: 3533315655786883349}
   - component: {fileID: 625732027917883407}
-  - component: {fileID: 2810457200673235546}
   m_Layer: 0
   m_Name: TileTop
   m_TagString: Untagged
@@ -223,8 +222,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7071974967650163513}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.049999952, z: 0}
-  m_LocalScale: {x: 0.9, y: 0.4, z: 0.9}
+  m_LocalPosition: {x: 0, y: -0.1, z: 0}
+  m_LocalScale: {x: 0.9, y: 0.3, z: 0.9}
   m_Children: []
   m_Father: {fileID: 5018541869450913954}
   m_RootOrder: 0
@@ -278,19 +277,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &2810457200673235546
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7071974967650163513}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7741014550525970294
 GameObject:
   m_ObjectHideFlags: 0
@@ -302,7 +288,6 @@ GameObject:
   - component: {fileID: 5840536620436525394}
   - component: {fileID: 1869109747542515094}
   - component: {fileID: 3154748606148813327}
-  - component: {fileID: 1371673064171034616}
   m_Layer: 0
   m_Name: TileBot
   m_TagString: Untagged
@@ -373,19 +358,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &1371673064171034616
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7741014550525970294}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8357124925441171287
 GameObject:
   m_ObjectHideFlags: 0
@@ -442,11 +414,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b97554f32ab2b2840891527da3c598f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  levelPrefab: {fileID: 5848367658917868592, guid: 137b4eff2d0e90949b372461fae5a473, type: 3}
   towerUnit: {fileID: 3791625421794813788}
   doorUnit: {fileID: 1482582183862024503}
   tileTop: {fileID: 7071974967650163513}
   tileStart: {fileID: 4858650343003490083}
   tileEnd: {fileID: 6918072365708878317}
+  tileCollider: {fileID: 6604509700611493889}
 --- !u!65 &6604509700611493889
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -459,7 +433,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 0.5, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: -0.25, z: 0}
 --- !u!1001 &4067306946789569651
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -554,11 +528,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3062001407651646955, guid: c879346d8fc5a4e43a4ea1c009031dc3, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.1
+      value: -0.25
       objectReference: {fileID: 0}
     - target: {fileID: 3062001407651646955, guid: c879346d8fc5a4e43a4ea1c009031dc3, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.15
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3062001407651646955, guid: c879346d8fc5a4e43a4ea1c009031dc3, type: 3}
       propertyPath: m_LocalRotation.w
