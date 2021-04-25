@@ -13,7 +13,7 @@ public class Unit : MonoBehaviour
 
     float orientation = 1;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         playerCamera = Camera.main;
     }

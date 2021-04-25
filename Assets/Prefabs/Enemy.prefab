@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 3062001407651646955}
   - component: {fileID: 2861420158570256888}
+  - component: {fileID: 8082241776200931168}
+  - component: {fileID: 6468910751176640877}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -45,6 +47,37 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   visualObject: {fileID: 4847365338743567430}
+  spherousCollider: {fileID: 6468910751176640877}
+  spriteRenderer: {fileID: 4406654710969807176}
+--- !u!54 &8082241776200931168
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4635316161871044255}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!135 &6468910751176640877
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4635316161871044255}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Radius: 0.3
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &4847365338743567430
 GameObject:
   m_ObjectHideFlags: 0
@@ -87,6 +120,7 @@ GameObject:
   - component: {fileID: 2910404699277093188}
   - component: {fileID: 4406654710969807176}
   - component: {fileID: 7441275987357680213}
+  - component: {fileID: 2618814170301823837}
   m_Layer: 0
   m_Name: AntDemon
   m_TagString: Untagged
@@ -178,3 +212,19 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!54 &2618814170301823837
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6737877581178312406}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0

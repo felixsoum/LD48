@@ -334,15 +334,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 113547087831213245, guid: 137b4eff2d0e90949b372461fae5a473, type: 3}
       propertyPath: m_LocalScale.x
-      value: 100
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 113547087831213245, guid: 137b4eff2d0e90949b372461fae5a473, type: 3}
       propertyPath: m_LocalScale.y
-      value: 100
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 113547087831213245, guid: 137b4eff2d0e90949b372461fae5a473, type: 3}
       propertyPath: m_LocalScale.z
-      value: 100
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 113547087831213245, guid: 137b4eff2d0e90949b372461fae5a473, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1156,7 +1156,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.01
-  far clip plane: 3.4028235e+38
+  far clip plane: 100000
   field of view: 30
   orthographic: 0
   orthographic size: 5
@@ -1243,7 +1243,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 23537096223171805, guid: f3216f52bbbfcce4d844495047678f82, type: 3}
       propertyPath: cost
-      value: 0
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 23537096223171805, guid: f3216f52bbbfcce4d844495047678f82, type: 3}
       propertyPath: isTower
@@ -1540,7 +1540,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 23537096223171805, guid: f3216f52bbbfcce4d844495047678f82, type: 3}
       propertyPath: cost
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 159132760162540953, guid: f3216f52bbbfcce4d844495047678f82, type: 3}
       propertyPath: m_Pivot.x

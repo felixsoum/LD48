@@ -12,13 +12,14 @@ public class GameDirector : MonoBehaviour
     [SerializeField] GameObject backButton;
     [SerializeField] Level startLevel;
     public int CoinAmount { get; set; } = 0;
-    int currentDepth;
+    int currentDepth = 0;
     public UnitBuyButton SelectedShopUnit { get; internal set; }
 
     Stack<Level> levelStack = new Stack<Level>();
 
     private void Awake()
     {
+        startLevel.Depth = currentDepth;
         levelStack.Push(startLevel);
         AddCoin(2);
         UpdateCameraTarget();
@@ -42,9 +43,15 @@ public class GameDirector : MonoBehaviour
             if (Physics.Raycast(ray, out hit))
             {
                 var tile = hit.collider.gameObject.GetComponent<Tile>();
-                if (tile != null && SelectedShopUnit != null)
+                if (tile != null)
                 {
-                    if (SelectedShopUnit.cost <= CoinAmount && tile.OnClick(SelectedShopUnit))
+                    if (tile.HasInnerLevel())
+                    {
+                        tile.OnClick();
+                    }
+                    else if (SelectedShopUnit != null 
+                        && SelectedShopUnit.cost <= CoinAmount
+                        && tile.OnClick(SelectedShopUnit))
                     {
                         AddCoin(-SelectedShopUnit.cost);
                     }

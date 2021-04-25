@@ -26,19 +26,36 @@ public class Tile : MonoBehaviour
         {
             case '#':
                 tileTop.SetActive(true);
+                tileStart.SetActive(false);
+                tileEnd.SetActive(false);
                 break;
             case 'S':
                 tileStart.SetActive(true);
+                tileTop.SetActive(false);
+                tileEnd.SetActive(false);
                 break;
             case 'E':
                 tileEnd.SetActive(true);
+                tileStart.SetActive(false);
+                tileTop.SetActive(false);
+                break;
+            default:
+                tileTop.SetActive(false);
+                tileStart.SetActive(false);
+                tileEnd.SetActive(false);
                 break;
         }
     }
 
-    internal bool OnClick(UnitBuyButton selectedShopUnit)
+    internal void SpawnEnemy(EnemyUnit enemyUnit) => innerLevel.SpawnEnemy(enemyUnit);
+
+    internal bool IsDoorActive() => doorUnit.IsDoorActive();
+
+    internal bool HasInnerLevel() => innerLevel != null;
+
+    internal bool OnClick(UnitBuyButton selectedShopUnit = null)
     {
-        if (innerLevel != null)
+        if (HasInnerLevel())
         {
             doorUnit.HideSphere();
             OnLevelZoom?.Invoke(innerLevel);

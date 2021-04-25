@@ -6,9 +6,11 @@ using UnityEngine;
 public class DoorUnit : Unit
 {
     [SerializeField] GameObject sphere;
+    private bool isActivated;
 
     internal void Activate()
     {
+        isActivated = true;
         gameObject.SetActive(true);
     }
 
@@ -26,4 +28,6 @@ public class DoorUnit : Unit
     {
         sphere.gameObject.SetActive(true);
     }
+
+    internal bool IsDoorActive() => isActivated;
 }

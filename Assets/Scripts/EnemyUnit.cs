@@ -4,15 +4,25 @@ using UnityEngine;
 
 public class EnemyUnit : Unit
 {
-    private const int BaseHp = 5;
+    [SerializeField] SphereCollider spherousCollider;
+    [SerializeField] SpriteRenderer spriteRenderer;
+    private const int BaseHp = 1;
     int currentHp = BaseHp;
     private const float BaseMoveSpeed = 0.25f;
-    float moveSpeed = BaseMoveSpeed;
-    List<Vector3> waypoints = new List<Vector3>();
+    float currentMoveSpeed = BaseMoveSpeed;
+    List<Tile> waypoints = new List<Tile>();
     public Action<EnemyUnit> OnDeath;
     private GameDirector gameDirector;
+    Rigidbody myRigidbody;
+    private bool isDead;
 
     public int Depth { get; internal set; }
+
+    protected override void Awake()
+    {
+        base.Awake();
+        myRigidbody = GetComponent<Rigidbody>();
+    }
 
     protected override void Update()
     {
@@ -20,18 +30,27 @@ public class EnemyUnit : Unit
         if (waypoints.Count > 0)
         {
             float distanceThreshold = 0.01f * Level.GetDepthFactor(Depth);
-            if (Vector3.Distance(transform.position, waypoints[0]) < distanceThreshold)
+            Tile tile = waypoints[0];
+            if (Vector3.Distance(transform.position, tile.transform.position) < distanceThreshold)
             {
-                waypoints.RemoveAt(0);
+                if (tile.IsDoorActive())
+                {
+                    tile.SpawnEnemy(this);
+                    GoInsideDoor();
+                }
+                else
+                {
+                    waypoints.RemoveAt(0);
+                }
             }
         }
 
         if (waypoints.Count > 0)
         {
-            SetOrientation(transform.position.x < waypoints[0].x);
+            SetOrientation(transform.position.x < waypoints[0].transform.position.x);
 
-            float moveDelta = moveSpeed * Time.deltaTime * Level.GetDepthFactor(Depth);
-            transform.position = Vector3.MoveTowards(transform.position, waypoints[0], moveDelta);
+            float moveDelta = currentMoveSpeed * Time.deltaTime * Level.GetDepthFactor(Depth);
+            transform.position = Vector3.MoveTowards(transform.position, waypoints[0].transform.position, moveDelta);
         }
         else
         {
@@ -39,9 +58,9 @@ public class EnemyUnit : Unit
         }
     }
 
-    internal void AddWaypoint(Vector3 position)
+    internal void AddWaypoint(Tile tile)
     {
-        waypoints.Add(position);
+        waypoints.Add(tile);
     }
 
     internal override void Damage()
@@ -53,10 +72,32 @@ public class EnemyUnit : Unit
         }
     }
 
+    internal void GoInsideDoor()
+    {
+        OnDeath?.Invoke(this);
+        gameObject.SetActive(false);
+    }
+
     internal void Die()
     {
+        if (isDead)
+        {
+            return;
+        }
+        isDead = true;
         gameDirector.AddCoin(1);
         OnDeath?.Invoke(this);
+        spherousCollider.enabled = true;
+        myRigidbody.isKinematic = false;
+        spriteRenderer.flipY = true;
+        Vector3 ragdollForce = 0.5f * Vector3.up * Level.GetDepthFactor(Depth);
+        ragdollForce += UnityEngine.Random.onUnitSphere * Level.GetDepthFactor(Depth) * 0.25f;
+        myRigidbody.AddForce(ragdollForce, ForceMode.VelocityChange);
+        Invoke("RemoveMe", 2f);
+    }
+
+    public void RemoveMe()
+    {
         Destroy(gameObject);
     }
 
@@ -68,6 +109,12 @@ public class EnemyUnit : Unit
     internal void SetWaveNumber(int waveNumber)
     {
         currentHp += waveNumber;
-        moveSpeed *= waveNumber;
+        currentMoveSpeed *= waveNumber;
+    }
+
+    internal void Copy(EnemyUnit enemyToClone)
+    {
+        currentHp = enemyToClone.currentHp;
+        currentMoveSpeed = enemyToClone.currentMoveSpeed;
     }
 }

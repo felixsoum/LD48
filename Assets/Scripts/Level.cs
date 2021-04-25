@@ -150,7 +150,10 @@ public class Level : MonoBehaviour
     {
         InitTiles();
 
-        StartCoroutine(SpawnEnemies());
+        if (Depth == 0)
+        {
+            StartCoroutine(SpawnEnemies()); 
+        }
     }
 
     private IEnumerator SpawnEnemies()
@@ -162,24 +165,32 @@ public class Level : MonoBehaviour
             int spawnCount = waveNumber * 2;
             for (int i = 0; i < spawnCount; i++)
             {
-                SpawnEnemy(waveNumber);
+                SpawnEnemy();
                 yield return new WaitForSeconds(3f / waveNumber);
             }
-            float longerWait = 5f + Mathf.Sqrt(waveNumber * 3);
+            float longerWait = 3f + Mathf.Sqrt(waveNumber * 3);
             yield return new WaitForSeconds(longerWait);
             waveNumber++;
         }
     }
 
-    private void SpawnEnemy(int waveNumber)
+    internal void SpawnEnemy(EnemyUnit enemyToClone = null)
     {
         var spawnPosition = tiles[startIndex].transform.position;
         var enemyObject = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
         var enemyUnit = enemyObject.GetComponent<EnemyUnit>();
+
         enemyObject.transform.localScale = transform.localScale;
         enemyUnit.SetGameDirector(gameDirector);
         enemyUnit.Depth = Depth;
-        enemyUnit.SetWaveNumber(waveNumber);
+        if (enemyToClone == null)
+        {
+            enemyUnit.SetWaveNumber(waveNumber); 
+        }
+        else
+        {
+            enemyUnit.Copy(enemyToClone);
+        }
         enemyUnit.OnDeath += deadEnemy => enemies.Remove(deadEnemy);
         enemies.Add(enemyUnit);
 
@@ -190,17 +201,16 @@ public class Level : MonoBehaviour
     {
         foreach (var tileNode in chosenPath)
         {
-            enemyUnit.AddWaypoint(tiles[tileNode.x + tileNode.y * RowCount].transform.position);
+            enemyUnit.AddWaypoint(tiles[tileNode.x + tileNode.y * RowCount]);
 
         }
         //enemyUnit.AddWaypoint(tiles[4 + 4 * RowCount].transform.position);
-        enemyUnit.AddWaypoint(tiles[endIndex].transform.position);
+        enemyUnit.AddWaypoint(tiles[endIndex]);
     }
 
     private void InitTiles()
     {
-        //bool isFirstLevel = UnityEngine.Random.value > 0.5f;
-        bool isFirstLevel = true;
+        bool isFirstLevel = UnityEngine.Random.value > 0.5f;
         var chosenLevel = isFirstLevel ? scriptedLevel : scriptedLevel2;
         chosenPath = isFirstLevel ? levelPath : levelPath2;
 
